@@ -1,6 +1,5 @@
 import React from 'react';
-import { Route, Redirect, Switch, NavLink } from 'react-router-dom';
-import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
+import { Route, NavLink, Routes, Navigate, useParams, useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
   return (
@@ -53,8 +52,8 @@ const App = () => {
     </>)
   }
   const UserListPage = ({ id, user }) => {
-    const history = useHistory()
-    if (!user) return history.push('/users')
+    const navigate = useNavigate()
+    if (!user) return navigate('/users', { replace: true })
     return (<>
       <h1>UserPage</h1>
       <ul>
@@ -69,11 +68,11 @@ const App = () => {
     <div>
       <h1>App Layout</h1>
       <MainPage />
-      <Switch>
-        <Route exact path='/' component={Home} />
-        <Route path='/users/:userId?/:edit?' component={UserPage} />
-        <Redirect to='/' />
-      </Switch>
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path='users/:userId?/:edit?' element={<UserPage />} />
+        <Route path='*' element={<Navigate from='*' to='/ ' />} />
+      </Routes>
     </div>
   );
 }
